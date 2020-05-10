@@ -4,62 +4,68 @@
 import errorCheck
 import time
 
-def lueTiedosto(newMuistio):
+def listToFile(list, newMuistio):
+    file = open(newMuistio,"w")
+    for i in list:
+        file.write(i)
+    file.close()
+
+def readFile(newMuistio):
     file = open(newMuistio,"r")
     list = []
-    while True:
-        try:
-            read = file.read()
-        except Exception:
-            break
-        else:
-            list.append(read)
+    for i in file:
+        list.append(i)
     file.close()
     return list
+
+
 
 def main():
     muistio = input("Mink‰ nimist‰ tiedostoa k‰ytet‰‰n? ")
     while True:
         newMuistio = errorCheck.virheCheck(muistio)
         print("\n(1) Lue\n(2) Lis‰‰ merkint‰\n(3) Muokkaa merkint‰‰\n(4) Poista merkint‰\n(5) Tallenna ja lopeta")
-        answer = int(input("Mit‰ haluat tehd‰?: "))
-        if answer == 1:
+        answer1 = input("\nMit‰ haluat tehd‰?: ")
+        if answer1.isnumeric() == True:
+            answer = int(answer1)
+            if answer == 1:
             #Lue
-            file = open(newMuistio,"r")
-            read = file.read()
-            file.close()
-            print(read)
-        elif answer == 2:
+                file = open(newMuistio,"r")
+                read = file.read()
+                file.close()
+                print(read)
+            elif answer == 2:
             #Lis‰‰ merkint‰
-            file = open(newMuistio,"a")
-            text = input("Kirjoita uusi merkint‰: ")
-            timeText = text + " ::: " + time.strftime("%x") + "\n"
-            file.write(timeText)
-            file.close()
-        elif answer == 3:
+                file = open(newMuistio,"a")
+                text = input("Kirjoita uusi merkint‰: ")
+                timeText = text + " ::: " + time.strftime("%x") + "\n"
+                file.write(timeText)
+                file.close()
+            elif answer == 3:
             #muokkaa
-            file = open(newMuistio,"r")
-            list = []
-            for i in file:
-                list.append(i)
-            file.close()
-            print("Listalla on", len(list), "merkint‰‰.")
-            luku = int(input("Mit‰ niist‰ poistetaan?: ")) - 1
-            print("Poistettiin merkint‰", list[luku])
-            list.pop(luku)
-            file = open(newMuistio,"w")
-            for i in list:
-                file.write(i)
-            file.close()
-        elif answer == 4:
+                list = readFile(newMuistio)
+                print("Listalla on", len(list), "merkint‰‰.")
+                luku = int(input("Mit‰ niist‰ muutetaan?: ")) - 1
+                print(list[luku])
+                text = input("Anna uusi teksti: ")
+                list[luku] = text + " ::: " + time.strftime("%x")+ "\n"
+                listToFile(list, newMuistio)
+            elif answer == 4:
             #poista
-            print('i')
-        elif answer == 5:
+                list = readFile(newMuistio)
+                text = errorCheck.wrongInput(list)
+                print("Poistettiin merkint‰", list[text-1])
+                list.pop(text-1)
+                listToFile(list, newMuistio)
+            elif answer == 5:
             #lopeta
-            print('Lopetetaan.')
-            break
+                print('Lopetetaan.')
+                break
+            else:
+                print("Valintaa ei tunnistettu.")
         else:
-            print("Valintaa ei tunnistettu.")
+            print('Syˆt‰ luku')
+        
         
 if __name__ == "__main__":
     main()
