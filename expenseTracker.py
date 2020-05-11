@@ -14,7 +14,7 @@ class expense:
 def addExpense():
       name = input("Ostettu asia: ")
       cost = input("Hinta: ")
-      date = " ::: " + time.strftime("%x") + "\n"
+      date = " ::: " + time.strftime("%x") + '\n'
 
       package = expense()
       package.name = name
@@ -31,8 +31,14 @@ def main():
         if answer == '1':
             #Lue
             list = readFiles.findDate(newMuistio)
+            total = 0
             for i in list:
                 print(i)
+                nameCost = i.split('Ä')
+                costs = nameCost[0].split(': ')
+                amount = int(costs[1])
+                total = total + amount
+            print('Kulutus yhteens‰:', total,'Ä')
         elif answer == '2':
             #Lis‰‰ merkint‰
             bought = []
@@ -41,7 +47,7 @@ def main():
             for i in range(0,num):
                 toimitus = addExpense()
                 bought.append(toimitus)
-                file.write(bought[i].name+": "+bought[i].cost +bought[i].date)
+                file.write(bought[i].name+": "+bought[i].cost + 'Ä' +bought[i].date)
             file.close()
         elif answer == '3':
             #muokkaa
@@ -50,7 +56,7 @@ def main():
             luku = int(input("Mit‰ niist‰ muutetaan?: ")) - 1            
             print(list[luku])
             text = addExpense()
-            list[luku] = text.name+": "+ text.cost + text.date
+            list[luku] = text.name+": "+ text.cost + 'Ä' + text.date
             readFiles.listToFile(list, newMuistio)
         elif answer == '4':
             #poista
