@@ -6,6 +6,22 @@ import time
 import readFiles
 import errorCheck
 
+class expense:
+    name = ""
+    cost = 0
+    date = ""
+
+def addExpense():
+      name = input("Ostettu asia: ")
+      cost = input("Hinta: ")
+      date = " ::: " + time.strftime("%x") + "\n"
+
+      package = expense()
+      package.name = name
+      package.cost = cost
+      package.date = date
+      return package
+    
 def main():
     muistio = input("Mink‰ nimist‰ tiedostoa k‰ytet‰‰n? ")
     while True:
@@ -14,24 +30,27 @@ def main():
         answer = input("\nMit‰ haluat tehd‰?: ")
         if answer == '1':
             #Lue
-            text = readFiles.findDate(newMuistio)
-            for i in text:
+            list = readFiles.findDate(newMuistio)
+            for i in list:
                 print(i)
         elif answer == '2':
             #Lis‰‰ merkint‰
+            bought = []
             file = open(newMuistio,"a")
-            text = input("Kirjoita uusi merkint‰: ")
-            timeText = text + " ::: " + time.strftime("%x") + "\n"
-            file.write(timeText)
+            num = int(input("Kuinka monta ostosta?:"))
+            for i in range(0,num):
+                toimitus = addExpense()
+                bought.append(toimitus)
+                file.write(bought[i].name+": "+bought[i].cost +bought[i].date)
             file.close()
         elif answer == '3':
             #muokkaa
             list = readFiles.readFile(newMuistio)
             print("Listalla on", len(list), "merkint‰‰.")
-            luku = int(input("Mit‰ niist‰ muutetaan?: ")) - 1
+            luku = int(input("Mit‰ niist‰ muutetaan?: ")) - 1            
             print(list[luku])
-            text = input("Anna uusi teksti: ")
-            list[luku] = text + " ::: " + time.strftime("%x")+ "\n"
+            text = addExpense()
+            list[luku] = text.name+": "+ text.cost + text.date
             readFiles.listToFile(list, newMuistio)
         elif answer == '4':
             #poista

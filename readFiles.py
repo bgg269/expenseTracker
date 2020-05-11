@@ -29,7 +29,7 @@ def findDate(newMuistio):
             break
         elif txt.lower() == 'b':
             answer = input("\nMonesko kuukausi? (vaatii 0:n eteen)")
-            answer2 = input("\nMikä vuosi? (esim. 2020 = 20)")
+            answer2 = input("Mikä vuosi? (esim. 2020 = 20)")
             file = open(newMuistio,"r")
             list = []
             for i in file:
