@@ -15,7 +15,7 @@ def virheCheck(muistio):
 def wrongInput(list):
     while True:
         print("Listalla on", len(list), "merkint‰‰.")
-        text = input("Mik‰ niist‰ poistetaan? 0 poistaa viimeisen: ")
+        text = input("Mik‰ niist‰ poistetaan? ")
         try:
             luku1 = int(text)
         except ValueError:
