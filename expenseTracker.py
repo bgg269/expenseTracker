@@ -26,18 +26,40 @@ def main():
     muistio = input("Mink‰ nimist‰ tiedostoa k‰ytet‰‰n? ")
     while True:
         newMuistio = errorCheck.virheCheck(muistio)
-        print("\n(1) Lue\n(2) Lis‰‰ merkint‰\n(3) Muokkaa merkint‰‰\n(4) Poista merkint‰\n(5) Tallenna ja lopeta")
+        print("\n(1) Lue tiedostosta\n(2) Lis‰‰ merkint‰\n(3) Muokkaa merkint‰‰\n(4) Poista merkint‰\n(5) Tallenna ja lopeta")
         answer = input("\nMit‰ haluat tehd‰?: ")
         if answer == '1':
             #Lue
-            list = readFiles.findDate(newMuistio)
-            total = 0
-            for i in list:
-                print(i)
-                nameCost = i.split('Ä')
-                costs = nameCost[0].split(': ')
-                amount = int(costs[1])
-                total = total + amount
+            print('A n‰ytt‰‰ koko historian \nB n‰ytt‰‰ tietyn kuukauden\nC n‰ytt‰‰ yhteenvedon')
+            while True:
+                txt = input("\nMit‰ haluat tehd‰?: ")
+                if txt.lower() == 'a' or txt.lower() == 'b' or txt.lower() == 'c':
+                    list = readFiles.findDate(txt, newMuistio)
+                    break
+                else:
+                    print('Virheellinen valinta')
+            
+            total= 0
+            if txt == 'a' or txt == 'b':
+                total = 0
+                for i in list:
+                    print(i)
+                    nameCost = i.split('Ä')
+                    costs = nameCost[0].split(': ')
+                    amount = int(costs[1])
+                    total = total + amount
+            elif txt == 'c':
+                print('\nKuukausien kulutukset:')
+                num_dict = {}
+                for t in list:
+                    if t[0] in num_dict:
+                        num_dict[t[0]] = num_dict[t[0]]+t[1]
+                    else:
+                        num_dict[t[0]] = t[1]
+                for key,value in num_dict.items():
+                    print(str(key)+'.', value, 'Ä')
+                    total = total + value
+            
             print('Kulutus yhteens‰:', total,'Ä')
         elif answer == '2':
             #Lis‰‰ merkint‰
@@ -45,18 +67,31 @@ def main():
             file = open(newMuistio,"a")
             num = int(input("Kuinka monta ostosta?:"))
             for i in range(0,num):
-                toimitus = addExpense()
-                bought.append(toimitus)
-                file.write(bought[i].name+": "+bought[i].cost + 'Ä' +bought[i].date)
+                text = addExpense()
+                while True:
+                    if text.cost.isnumeric():
+                        bought.append(text)
+                        file.write(bought[i].name+": "+bought[i].cost + 'Ä' +bought[i].date)
+                        break
+                    else:
+                        print('Virheellinen arvo')
+                        text = addExpense()
             file.close()
         elif answer == '3':
             #muokkaa
             list = readFiles.readFile(newMuistio)
-            print("Listalla on", len(list), "merkint‰‰.")
+            print("Listalla on", len(list), "merkint‰‰.\n")
             luku = int(input("Mit‰ niist‰ muutetaan?: ")) - 1            
             print(list[luku])
+            date = list[luku].split('::: ')
             text = addExpense()
-            list[luku] = text.name+": "+ text.cost + 'Ä' + text.date
+            while True:
+                if text.cost.isnumeric():
+                    list[luku] = text.name+": "+ text.cost + 'Ä ::: ' + date[1]
+                    break
+                else:
+                    print('Virheellinen arvo')
+                    text = addExpense()
             readFiles.listToFile(list, newMuistio)
         elif answer == '4':
             #poista

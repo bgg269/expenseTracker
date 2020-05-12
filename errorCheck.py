@@ -21,10 +21,10 @@ def wrongInput(list):
         except ValueError:
             print('Syötä luku')
         except IndexError:
-            print("index out of range")
+            print("luku ei listalla")
         else:
             return luku1
-    
+
         
 if __name__ == "__main__":
     main()

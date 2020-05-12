@@ -17,36 +17,54 @@ def readFile(newMuistio):
     file.close()
     return list
 
-def findDate(newMuistio):
+def findDate(txt, newMuistio):
     re = []
-    
-    print('A näyttää koko historian, B näyttää tietyn kuukauden')
     while True:
-        txt = input("\nMitä haluat tehdä?: ")
         if txt.lower() == 'a':
-            print('koko lista:\n')
+            print('Koko historia:\n')
             list = readFile(newMuistio)
             re = list
             break
         elif txt.lower() == 'b':
-            answer = input("\nMonesko kuukausi? (vaatii 0:n eteen)")
-            #answer2 = input("Mikä vuosi? (esim. 2020 = 20)")
+            answer = input("\nMikä kuukausi? (luku): ")
+            print('Kuukauden menot:\n')
             file = open(newMuistio,"r")
             list = []
             for i in file:
                 date = i.split('::: ')           
                 months = date[1].split('/')
                 month = months[0]
-                #year = months[2].rstrip('\n')
-                if month == answer: # and year == answer2:
-                    list.append(i)
-                    
+                if month.strip('0') == answer:
+                    list.append(i)  
             file.close()
             re = list
             break
-        else:
-            print('Valintaa ei tunnistettu')
+        elif txt.lower() == 'c':
+            file = open(newMuistio,"r")
+            list = []
+            num = 1
+            total = 0
+            for i in file:
+                nameCost = i.split('€')
+                costs = nameCost[0].split(': ')
+                amount = int(costs[1])
+                date = i.split('::: ')           
+                months = date[1].split('/')
+                month = months[0]
+                month1 = int(month.lstrip('0'))
+                amount1 = 0
+                for num in range(1,13):
+                    if num == month1 :
+                        list.append((num, amount, 'e'))
+                    else:
+                        num = num + 1
+            file.close()
+            re = list
+            break
+        
+        txt = input("\nMitä haluat tehdä?: ")
+        
     if len(re) == 0:
         print('Listalla ei ole merkintöjä tälle ajalla')
-    
     return re
+
